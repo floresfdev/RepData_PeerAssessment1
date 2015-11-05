@@ -1,20 +1,11 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
-```{r setoptions, echo=FALSE, warning = FALSE}
-library(knitr)
-opts_chunk$set(echo = TRUE, 
-               warning = FALSE,
-               message = FALSE)
-```
+
 
 ## Loading and preprocessing the data
 
-```{r preprocess}
+
+```r
 unzip("activity.zip")
 activity <- read.csv("activity.csv")
 ```
@@ -26,8 +17,10 @@ activity <- read.csv("activity.csv")
 Group the data by date and compute the sum of steps taken per day. For this computation, NAs were removed . 
 Column `interval` is not relevant for this summary, so we use the special `summarise_each_()` function to exclude it.
 
-```{r stepsPerDay}
+
+```r
 library(dplyr)
+
 groupByDay <- group_by(activity, date) 
 stepsPerDay <- 
     summarise_each_(groupByDay, 
@@ -37,13 +30,16 @@ stepsPerDay <-
 
 ### Histogram of steps per day
 
-```{r histogramStepsPerDay}
+
+```r
 library(ggplot2)
 qplot(steps, data = stepsPerDay,
       main = "Histogram of steps per day",
       fill = I("wheat"),
       col = I("black"))
 ```
+
+![](PA1_template_files/figure-html/histogramStepsPerDay-1.png) 
 
 ## What is the average daily activity pattern?
 
