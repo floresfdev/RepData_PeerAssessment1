@@ -45,6 +45,15 @@ qplot(steps, data = stepsPerDay,
       col = I("black"))
 ```
 
+### Mean and median of steps per day
+
+```{r meanAndMedian}
+meanStepsPerDay <- mean(stepsPerDay$steps)
+medianStepsPerDay <- median(stepsPerDay$steps)
+```
+
+Of the total number of steps taken per day, the mean is `r meanStepsPerDay` and the median is `r medianStepsPerDay`.
+
 ## What is the average daily activity pattern?
 
 
