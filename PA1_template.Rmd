@@ -8,8 +8,8 @@ output:
 ```{r setoptions, echo=FALSE, warning = FALSE}
 library(knitr)
 opts_chunk$set(echo = TRUE, 
-               warning = FALSE,
-               message = FALSE)
+               warning = TRUE, #For final commit make it => FALSE
+               message = TRUE) #For final commit make it => FALSE
 ```
 
 ## Loading and preprocessing the data

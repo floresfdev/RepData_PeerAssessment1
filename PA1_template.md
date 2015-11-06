@@ -21,6 +21,26 @@ Column `interval` is not relevant for this summary, so we use the special `summa
 
 ```r
 library(dplyr)
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.2.2
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+## 
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+## 
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 groupByDay <- group_by(activity, date) 
 stepsPerDay <- 
     summarise_each_(groupByDay, 
@@ -34,10 +54,21 @@ stepsPerDay <-
 
 ```r
 library(ggplot2)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.2.2
+```
+
+```r
 qplot(steps, data = stepsPerDay,
       main = "Histogram of steps per day",
       fill = I("wheat"),
       col = I("black"))
+```
+
+```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
 ```
 
 ![](PA1_template_files/figure-html/histogramStepsPerDay-1.png) 
