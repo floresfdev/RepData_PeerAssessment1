@@ -139,4 +139,20 @@ stepsNA <- sum(is.na(activity$steps))
 The total number of missing values in the dataset is 2304.
 
 
+### Fill in missing values
+
+To fill in `NA`s, the strategy used is to replace them with the average steps for the given interval.
+
+
+```r
+activityComplete <- activity
+indexNA <- which(is.na(activityComplete$steps))
+for (i in indexNA) {
+    activityComplete[i, 1] <- 
+        meanByInterval[
+            (activityComplete[i, 3] == meanByInterval$interval), 2][[1]]
+}
+```
+
+
 ## Are there differences in activity patterns between weekdays and weekends?
