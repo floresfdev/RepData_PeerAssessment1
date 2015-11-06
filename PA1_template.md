@@ -129,6 +129,14 @@ On average across all the days in the dataset, the interval 835 contains the max
 
 ## Imputing missing values
 
+### Compute the `NA`s
+
+
+```r
+stepsNA <- sum(is.na(activity$steps))
+```
+
+The total number of missing values in the dataset is 2304.
 
 
 ## Are there differences in activity patterns between weekdays and weekends?

@@ -139,6 +139,11 @@ names(meanByInterval)[2] &lt;- &quot;meanSteps&quot;</code></pre>
 </div>
 <div id="imputing-missing-values" class="section level2">
 <h2>Imputing missing values</h2>
+<div id="compute-the-nas" class="section level3">
+<h3>Compute the <code>NA</code>s</h3>
+<pre class="r"><code>stepsNA &lt;- sum(is.na(activity$steps))</code></pre>
+<p>The total number of missing values in the dataset is 2304.</p>
+</div>
 </div>
 <div id="are-there-differences-in-activity-patterns-between-weekdays-and-weekends" class="section level2">
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
