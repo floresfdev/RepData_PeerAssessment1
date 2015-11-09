@@ -67,8 +67,11 @@ The time intervals in the dataset are not very good for a time series plot, so w
 ### Represent the interval as a string of format `"hh:mm"`. 
 
 To do that, apply integer division to extract the hour part, and mod to extract the minutes part. If the hour/minutes part is less than 10 (e.g. it's 0, 1, 5, etc), add a zero before to normalize the format. Save the result in a new column of the dataset.
+
 For more references about the operators for integer division and mod:
+
 1. https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html
+
 2. https://en.wikipedia.org/wiki/Modulo_operation
 
 
@@ -90,6 +93,7 @@ activity$time <-
 ### Summarize by date
 
 Group the data by date and compute the sum of steps taken per day. For this computation, NAs were removed. 
+
 Columns `interval` and `time` are not relevant for this summary, so we use the special `summarise_each_()` function to exclude it.
 
 
@@ -137,7 +141,8 @@ Of the total number of steps taken per day, the mean is 9354.2295082 and the med
 
 ### Compute the average by interval
 
-Group the data by time and interval and compute the mean of steps. As the two columns have the same info with and without format, the `group_by()` result is not affected by the presence of them at the same time. For this computation, NAs were removed.
+Group the data by time and interval and compute the mean of steps. As the two columns have the same info with and without format, the `group_by()` result is not affected by the presence of them at the same time. For this computation, `NA`s were removed.
+
 Column `date` is  not relevant for this summary, so we use the special `summarise_each_()` function to exclude it.
 
 
@@ -154,6 +159,7 @@ names(meanByInterval)[3] <- "meanSteps"
 ### Time series plot
 
 For this plot we take the time intervals in the x axis, and we apply the functions `period_to_seconds()` and `hm()` from the `lubridate` package in order to make a real time series plot. If the column `interval` was used, the plot will appear with gaps because it's not a real continous series. Instead, the number of seconds from the midnight is used on the x axis.
+
 Due to plot reasons, we use `scale_x_continuous()` to label the x ticks appropriately, breaking the values every 6 hours. The special case is the tick at `23:59`, but it's only cosmetic because there is no data for that exact time. Note that the breaks are expressed in number of seconds from the midnight, as described before.
 
 

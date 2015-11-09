@@ -251,10 +251,14 @@ activity &lt;- read.csv(&quot;activity.csv&quot;)
 
 <h3>Represent the interval as a string of format <code>&quot;hh:mm&quot;</code>.</h3>
 
-<p>To do that, apply integer division to extract the hour part, and mod to extract the minutes part. If the hour/minutes part is less than 10 (e.g. it&#39;s 0, 1, 5, etc), add a zero before to normalize the format. Save the result in a new column of the dataset.
-For more references about the operators for integer division and mod:
-1. <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html</a>
-2. <a href="https://en.wikipedia.org/wiki/Modulo_operation">https://en.wikipedia.org/wiki/Modulo_operation</a></p>
+<p>To do that, apply integer division to extract the hour part, and mod to extract the minutes part. If the hour/minutes part is less than 10 (e.g. it&#39;s 0, 1, 5, etc), add a zero before to normalize the format. Save the result in a new column of the dataset.</p>
+
+<p>For more references about the operators for integer division and mod:</p>
+
+<ol>
+<li><p><a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html">https://stat.ethz.ch/R-manual/R-devel/library/base/html/Arithmetic.html</a></p></li>
+<li><p><a href="https://en.wikipedia.org/wiki/Modulo_operation">https://en.wikipedia.org/wiki/Modulo_operation</a></p></li>
+</ol>
 
 <pre><code class="r">activity$time &lt;- 
     paste0(
@@ -271,8 +275,9 @@ For more references about the operators for integer division and mod:
 
 <h3>Summarize by date</h3>
 
-<p>Group the data by date and compute the sum of steps taken per day. For this computation, NAs were removed. 
-Columns <code>interval</code> and <code>time</code> are not relevant for this summary, so we use the special <code>summarise_each_()</code> function to exclude it.</p>
+<p>Group the data by date and compute the sum of steps taken per day. For this computation, NAs were removed. </p>
+
+<p>Columns <code>interval</code> and <code>time</code> are not relevant for this summary, so we use the special <code>summarise_each_()</code> function to exclude it.</p>
 
 <pre><code class="r">library(dplyr)
 groupByDay &lt;- group_by(activity, date) 
@@ -309,8 +314,9 @@ medianStepsPerDay &lt;- median(stepsPerDay$steps)
 
 <h3>Compute the average by interval</h3>
 
-<p>Group the data by time and interval and compute the mean of steps. As the two columns have the same info with and without format, the <code>group_by()</code> result is not affected by the presence of them at the same time. For this computation, NAs were removed.
-Column <code>date</code> is  not relevant for this summary, so we use the special <code>summarise_each_()</code> function to exclude it.</p>
+<p>Group the data by time and interval and compute the mean of steps. As the two columns have the same info with and without format, the <code>group_by()</code> result is not affected by the presence of them at the same time. For this computation, <code>NA</code>s were removed.</p>
+
+<p>Column <code>date</code> is  not relevant for this summary, so we use the special <code>summarise_each_()</code> function to exclude it.</p>
 
 <pre><code class="r">groupByInterval &lt;- group_by(activity, time, interval)
 meanByInterval &lt;- 
@@ -322,8 +328,9 @@ names(meanByInterval)[3] &lt;- &quot;meanSteps&quot;
 
 <h3>Time series plot</h3>
 
-<p>For this plot we take the time intervals in the x axis, and we apply the functions <code>period_to_seconds()</code> and <code>hm()</code> from the <code>lubridate</code> package in order to make a real time series plot. If the column <code>interval</code> was used, the plot will appear with gaps because it&#39;s not a real continous series. Instead, the number of seconds from the midnight is used on the x axis.
-Due to plot reasons, we use <code>scale_x_continuous()</code> to label the x ticks appropriately, breaking the values every 6 hours. The special case is the tick at <code>23:59</code>, but it&#39;s only cosmetic because there is no data for that exact time. Note that the breaks are expressed in number of seconds from the midnight, as described before.</p>
+<p>For this plot we take the time intervals in the x axis, and we apply the functions <code>period_to_seconds()</code> and <code>hm()</code> from the <code>lubridate</code> package in order to make a real time series plot. If the column <code>interval</code> was used, the plot will appear with gaps because it&#39;s not a real continous series. Instead, the number of seconds from the midnight is used on the x axis.</p>
+
+<p>Due to plot reasons, we use <code>scale_x_continuous()</code> to label the x ticks appropriately, breaking the values every 6 hours. The special case is the tick at <code>23:59</code>, but it&#39;s only cosmetic because there is no data for that exact time. Note that the breaks are expressed in number of seconds from the midnight, as described before.</p>
 
 <pre><code class="r">library(lubridate)
 qplot(period_to_seconds(hm(time)), meanSteps, 
