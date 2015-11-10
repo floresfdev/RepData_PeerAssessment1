@@ -204,9 +204,10 @@ On average across all the days in the dataset, the interval 08:35 contains the m
 
 ```r
 stepsNA <- sum(is.na(activity$steps))
+percentNA <- (stepsNA * 100) / nrow(activity)
 ```
 
-The total number of missing values in the dataset is 2304.
+The total number of missing values in the dataset is 2304, which is 13.1147541% of the total of observations.
 
 
 ### Fill in missing values

@@ -364,9 +364,10 @@ qplot(period_to_seconds(hm(time)), meanSteps,
 <h3>Compute the <code>NA</code>s</h3>
 
 <pre><code class="r">stepsNA &lt;- sum(is.na(activity$steps))
+percentNA &lt;- (stepsNA * 100) / nrow(activity)
 </code></pre>
 
-<p>The total number of missing values in the dataset is 2304.</p>
+<p>The total number of missing values in the dataset is 2304, which is 13.1147541% of the total of observations.</p>
 
 <h3>Fill in missing values</h3>
 

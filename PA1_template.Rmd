@@ -146,9 +146,10 @@ On average across all the days in the dataset, the interval `r maxStepsDailyAver
 
 ```{r stepsNA}
 stepsNA <- sum(is.na(activity$steps))
+percentNA <- (stepsNA * 100) / nrow(activity)
 ```
 
-The total number of missing values in the dataset is `r stepsNA`.
+The total number of missing values in the dataset is `r stepsNA`, which is `r percentNA`% of the total of observations.
 
 
 ### Fill in missing values
