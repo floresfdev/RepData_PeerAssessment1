@@ -211,7 +211,7 @@ The total number of missing values in the dataset is 2304.
 
 ### Fill in missing values
 
-To fill in `NA`s, the strategy used is to replace them with the average steps for the given interval.
+To fill in `NA`s, the strategy used is to replace them with the average steps for the given interval in the whole dataset (computed by ignoring the missing values). The result is saved in a new dataset.
 
 
 ```r
@@ -220,9 +220,62 @@ indexNA <- which(is.na(activityComplete$steps))
 for (i in indexNA) {
     activityComplete[i, 1] <- 
         meanByInterval[
-            (activityComplete[i, 3] == meanByInterval$interval), 2][[1]]
+            (activityComplete[i, 3] == meanByInterval$interval), 3][[1]]
 }
 ```
+
+
+### Checking that all data is present in the new dataset
+
+
+```r
+stepsComplete <- sum(is.na(activityComplete$steps))
+```
+
+After filling the missing values, there is 0 `NA`s in the new dataset.
+
+
+### Histogram of steps per day after filling the missing values
+
+
+```r
+groupCompleteByDay <- group_by(activityComplete, date) 
+stepsCompletePerDay <- 
+    summarise_each_(groupCompleteByDay, 
+                    funs(sum), 
+                    list(quote(-interval),
+                         quote(-time)))
+
+qplot(steps, data = stepsCompletePerDay,
+      main = "Histogram of steps per day",
+      fill = I("wheat"),
+      col = I("black"))
+```
+
+```
+## stat_bin: binwidth defaulted to range/30. Use 'binwidth = x' to adjust this.
+```
+
+![plot of chunk histogramCompleteStepsPerDay](figure/histogramCompleteStepsPerDay-1.png) 
+
+### Mean and median of steps per day after filling the missing values
+
+
+```r
+meanStepsCompletePerDay <- mean(stepsCompletePerDay$steps)
+medianStepsCompletePerDay <- median(stepsCompletePerDay$steps)
+```
+
+After filling the missing values, of the total number of steps taken per day, the mean is 1.0766189 &times; 10<sup>4</sup> and the median is 1.0766189 &times; 10<sup>4</sup>.
+
+
+### Impact of imputing missing data
+
+After filling the missing values, the histogram shows major changes around the range between `0` and approximately `715` steps, as well around the range between `10715` and `11430` steps. The rest of the information seems to fit the primary model that was excluding the `NA`s.
+
+Regarding the values of mean and median of steps per day, both values increased comparing them to the first part of the analysis. It's notable that the mean and median are now the same, and it's coherent with the histogram showed. This mean = median situation, gives us a hint that the data is evenly divided around the mean.
+
+Reference: https://en.wikipedia.org/wiki/Arithmetic_mean#Contrast_with_median
 
 
 ## Are there differences in activity patterns between weekdays and weekends?

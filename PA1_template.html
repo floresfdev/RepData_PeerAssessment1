@@ -370,16 +370,59 @@ qplot(period_to_seconds(hm(time)), meanSteps,
 
 <h3>Fill in missing values</h3>
 
-<p>To fill in <code>NA</code>s, the strategy used is to replace them with the average steps for the given interval.</p>
+<p>To fill in <code>NA</code>s, the strategy used is to replace them with the average steps for the given interval in the whole dataset (computed by ignoring the missing values). The result is saved in a new dataset.</p>
 
 <pre><code class="r">activityComplete &lt;- activity
 indexNA &lt;- which(is.na(activityComplete$steps))
 for (i in indexNA) {
     activityComplete[i, 1] &lt;- 
         meanByInterval[
-            (activityComplete[i, 3] == meanByInterval$interval), 2][[1]]
+            (activityComplete[i, 3] == meanByInterval$interval), 3][[1]]
 }
 </code></pre>
+
+<h3>Checking that all data is present in the new dataset</h3>
+
+<pre><code class="r">stepsComplete &lt;- sum(is.na(activityComplete$steps))
+</code></pre>
+
+<p>After filling the missing values, there is 0 <code>NA</code>s in the new dataset.</p>
+
+<h3>Histogram of steps per day after filling the missing values</h3>
+
+<pre><code class="r">groupCompleteByDay &lt;- group_by(activityComplete, date) 
+stepsCompletePerDay &lt;- 
+    summarise_each_(groupCompleteByDay, 
+                    funs(sum), 
+                    list(quote(-interval),
+                         quote(-time)))
+
+qplot(steps, data = stepsCompletePerDay,
+      main = &quot;Histogram of steps per day&quot;,
+      fill = I(&quot;wheat&quot;),
+      col = I(&quot;black&quot;))
+</code></pre>
+
+<pre><code>## stat_bin: binwidth defaulted to range/30. Use &#39;binwidth = x&#39; to adjust this.
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk histogramCompleteStepsPerDay"/> </p>
+
+<h3>Mean and median of steps per day after filling the missing values</h3>
+
+<pre><code class="r">meanStepsCompletePerDay &lt;- mean(stepsCompletePerDay$steps)
+medianStepsCompletePerDay &lt;- median(stepsCompletePerDay$steps)
+</code></pre>
+
+<p>After filling the missing values, of the total number of steps taken per day, the mean is 1.0766189 &times; 10<sup>4</sup> and the median is 1.0766189 &times; 10<sup>4</sup>.</p>
+
+<h3>Impact of imputing missing data</h3>
+
+<p>After filling the missing values, the histogram shows major changes around the range between <code>0</code> and approximately <code>715</code> steps, as well around the range between <code>10715</code> and <code>11430</code> steps. The rest of the information seems to fit the primary model that was excluding the <code>NA</code>s.</p>
+
+<p>Regarding the values of mean and median of steps per day, both values increased comparing them to the first part of the analysis. It&#39;s notable that the mean and median are now the same, and it&#39;s coherent with the histogram showed. This mean = median situation, gives us a hint that the data is evenly divided around the mean.</p>
+
+<p>Reference: <a href="https://en.wikipedia.org/wiki/Arithmetic_mean#Contrast_with_median">https://en.wikipedia.org/wiki/Arithmetic_mean#Contrast_with_median</a></p>
 
 <h2>Are there differences in activity patterns between weekdays and weekends?</h2>
 
