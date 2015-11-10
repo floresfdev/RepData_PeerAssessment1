@@ -187,7 +187,7 @@ stepsCompletePerDay <-
                          quote(-time)))
 
 qplot(steps, data = stepsCompletePerDay,
-      main = "Histogram of steps per day",
+      main = "Histogram of steps per day after filling the missing values",
       fill = I("wheat"),
       col = I("black"))
 ```
@@ -212,3 +212,49 @@ Reference: https://en.wikipedia.org/wiki/Arithmetic_mean#Contrast_with_median
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+### Weekdays and weekends
+
+On the complete dataset, create a factor column to report if the date of the measurement belongs to a weekday or a weekend. For that purpose use the function `wday()` from `lubridate` package, which returns the number 1 for sunday, 2 for monday, ... and 7 for saturday.
+
+```{r addWeekday}
+activityComplete$weekday <- as.factor(
+    ifelse(wday(activityComplete$date) == 1 | wday(activityComplete$date) == 7,
+           "weekend",
+           "weekday"))
+        
+```
+
+
+### Compute the average by interval, weekday and weekends
+
+Group the complete dataset by time, interval and weekday/weekend, and compute the mean of steps. 
+
+Column `date` is  not relevant for this summary, so we use the special `summarise_each_()` function to exclude it.
+
+```{r dataDailyAverageWeekday}
+groupByIntervalWeekday <- group_by(activityComplete, time, interval, weekday)
+meanByIntervalWeekday <- 
+    summarise_each_(groupByIntervalWeekday, 
+                    funs(mean), 
+                    list(quote(-date)))
+names(meanByIntervalWeekday)[4] <- "meanSteps"
+```
+
+
+### Time series plot by weekday and weekend
+
+For this plot again we take the real time intervals in the x axis, as specified on the section "Time series plot".
+
+```{r plotDailyAverageWeekday}
+qplot(period_to_seconds(hm(time)), meanSteps, 
+      data = meanByIntervalWeekday, 
+      facets = weekday ~ .,
+      geom = "line",
+      main = "Daily average number of steps taken by interval and weekday/weekend",
+      xlab = "Interval",
+      ylab = "Daily average number of steps") + 
+    scale_x_continuous(
+        breaks = c(0, 21600, 43200, 64800, 86340), 
+        labels = c("00:00", "06:00", "12:00", "18:00", "23:59"))
+```
