@@ -8,8 +8,8 @@ output:
 ```{r setoptions, echo=FALSE, warning = FALSE}
 library(knitr)
 opts_chunk$set(echo = TRUE, 
-               warning = TRUE, #For final commit make it => FALSE
-               message = TRUE) #For final commit make it => FALSE
+               warning = FALSE,
+               message = FALSE)
 ```
 
 ## Loading and preprocessing the data
@@ -59,7 +59,7 @@ activity$time <-
 
 Group the data by date and compute the sum of steps taken per day. For this computation, NAs were removed. 
 
-Columns `interval` and `time` are not relevant for this summary, so we use the special `summarise_each_()` function to exclude it.
+Columns `interval` and `time` are not relevant for this summary, so we use the special `summarise_each_()` function from `dplyr` package to exclude it.
 
 ```{r stepsPerDay}
 library(dplyr)
@@ -113,7 +113,7 @@ names(meanByInterval)[3] <- "meanSteps"
 
 ### Time series plot
 
-For this plot we take the time intervals in the x axis, and we apply the functions `period_to_seconds()` and `hm()` from the `lubridate` package in order to make a real time series plot. If the column `interval` was used, the plot will appear with gaps because it's not a real continous series. Instead, the number of seconds from the midnight is used on the x axis.
+For this plot we take the time intervals in the x axis, and we apply the functions `period_to_seconds()` and `hm()` from the `lubridate` package to the new column `time` in order to make a real time series plot. If the column `interval` was used, the plot will appear with gaps because it's not a real continous series (for example, consider the gap between 055 and 100). Instead, the number of seconds from the midnight is used on the x axis.
 
 Due to plot reasons, we use `scale_x_continuous()` to label the x ticks appropriately, breaking the values every 6 hours. The special case is the tick at `23:59`, but it's only cosmetic because there is no data for that exact time. Note that the breaks are expressed in number of seconds from the midnight, as described before.
 
@@ -206,7 +206,7 @@ After filling the missing values, of the total number of steps taken per day, th
 
 After filling the missing values, the histogram shows major changes around the range between `0` and approximately `715` steps, as well around the range between `10715` and `11430` steps. The rest of the information seems to fit the primary model that was excluding the `NA`s.
 
-Regarding the values of mean and median of steps per day, both values increased comparing them to the first part of the analysis. It's notable that the mean and median are now the same, and it's coherent with the histogram showed. This mean = median situation, gives us a hint that the data is evenly divided around the mean.
+Regarding the values of mean and median of steps per day, both values increased comparing them to the first part of the analysis. It's remarkable how the mean and median are now the same, and it's coherent with the histogram showed. This mean = median situation, gives us a hint that the data is evenly divided around the mean.
 
 Reference: https://en.wikipedia.org/wiki/Arithmetic_mean#Contrast_with_median
 
@@ -215,7 +215,7 @@ Reference: https://en.wikipedia.org/wiki/Arithmetic_mean#Contrast_with_median
 
 ### Weekdays and weekends
 
-On the complete dataset, create a factor column to report if the date of the measurement belongs to a weekday or a weekend. For that purpose use the function `wday()` from `lubridate` package, which returns the number 1 for sunday, 2 for monday, ... and 7 for saturday.
+On the complete dataset, create a factor column to report if the date of the measurement belongs to a weekday or a weekend. For that purpose we use the function `wday()` from `lubridate` package, which returns the number 1 for sunday, 2 for monday, ... and 7 for saturday.
 
 ```{r addWeekday}
 activityComplete$weekday <- as.factor(
